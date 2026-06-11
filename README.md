@@ -279,8 +279,8 @@ if __name__ == "__main__":
 
     import_directory(ROOT_FOLDER, dry_run=args.dry_run)
 
----- END SCRIPT ----
-
+---- END SCRIPT ---- 
+''''
 ---
 
 ## 🔒 Security Note
