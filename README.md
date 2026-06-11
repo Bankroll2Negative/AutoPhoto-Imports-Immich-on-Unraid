@@ -1,12 +1,3 @@
-To make this guide easily importable to GitHub, the best approach is to create a README.md file. This is the standard format for documentation on GitHub. When you upload it to a repository, GitHub automatically renders Markdown into a beautiful webpage with tables, code blocks, and syntax highlighting.Here is the content ready to be saved as README.md.How to use this:
-
-Create a new folder on your computer.
-Inside that folder, create a text file named README.md.
-Paste the code block below into that file.
-Save it.
-Upload this folder (containing README.md and your script) to a new GitHub repository.
-
-
 # Unraid Immich Auto-Importer
 
 A Python-based automation script designed to recursively scan folders on an **Unraid** server and upload images to a self-hosted **Immich** instance. 
