@@ -141,12 +141,13 @@ To run this automatically on a schedule (e.g., daily at midnight):
 
 ---
 
+---
+
 ## The Full Script
 
-Copy the code below entirely into your `immich_upload.py` file.
+Copy the code block below entirely into your `immich_upload.py` file.
 
----- BEGIN SCRIPT ----
-
+````python
 #!/usr/bin/python3
 import os
 import sys
