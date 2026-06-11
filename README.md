@@ -1,110 +1,153 @@
-# Unraid Immich Auto-Importer
+You are absolutely right. The issue is that when I wrap the entire README in code blocks, any triple backticks ``` inside the content close the outer wrapper early, breaking the format.
+Here is the complete README.md content. I have used four backticks (`` `` ``) for the internal code sections so they won't conflict with the outer formatting. Copy everything below exactly and save it as README.md.
+# 📸 Unraid Immich Auto-Importer
 
 A Python-based automation script designed to recursively scan folders on an **Unraid** server and upload images to a self-hosted **Immich** instance. 
 
-This tool includes a "Dry Run" mode to verify files before uploading, duplicate detection based on filename and modification time, and rate limiting to prevent server overload.
+This tool solves the common problem of moving large photo libraries into Immich without manual intervention. It features a **"Dry Run"** mode to verify files before uploading, intelligent duplicate detection based on filename and modification time, and built-in rate limiting to prevent server overload.
 
-## 🚀 Features
+## ✨ Features
 
-- **Recursive Scanning**: Automatically traverses subdirectories.
-- **Dry Run Mode**: Simulate uploads without sending data to the API.
-- **Duplicate Handling**: Skips files that already exist (based on `deviceAssetId`).
-- **Rate Limiting**: Built-in delay between requests to protect your server.
-- **Error Resilience**: Continues processing even if individual files fail.
-- **Multi-format Support**: Handles JPG, PNG, HEIC, HEIF, and WEBP.
-
-## 📋 Prerequisites
-
-Before running the script, ensure your Unraid environment is set up correctly:
-
-1.  **Community Applications (CA)**: Ensure the CA plugin is installed on your Unraid dashboard.
-2.  **Python 3**: Installed on the Unraid host OS.
-3.  **Requests Library**: The Python HTTP library required for network communication.
-4.  **Immich Instance**: A running self-hosted Immich server.
-5.  **API Key**: Generate a key in Immich (*Settings → API Keys*).
+- **Recursive Scanning**: Automatically traverses all subdirectories within a target folder.
+- **🧪 Dry Run Mode**: Simulate the entire process to see what *would* happen without sending any data to the API.
+- **🔄 Duplicate Handling**: Skips files that already exist (based on generated `deviceAssetId`).
+- **⏱️ Rate Limiting**: Configurable delay between requests to protect your Immich server from spikes.
+- **🛡️ Error Resilience**: Continues processing even if individual files fail (network timeout, permissions, etc.).
+- **📂 Multi-format Support**: Handles `.jpg`, `.jpeg`, `.png`, `.heic`, `.heif`, and `.webp`.
 
 ---
 
-## 🛠️ Installation & Setup
+## 📋 Prerequisites
 
-### Step 1: Install Python 3 on Unraid
+Before starting, ensure you have:
+1.  **Unraid OS**: Version 6.9+ recommended.
+2.  **Community Applications (CA)**: Installed on your dashboard.
+3.  **Python 3**: Will be installed during setup.
+4.  **Immich Instance**: Running on your local network.
+5.  **Immich API Key**: Generate one in Immich (*Settings → API Keys*).
 
-Unraid does not include Python by default.
+---
 
-1.  Open your **Unraid Dashboard**.
-2.  Click on **Community Applications**.
-3.  Search for `Python`.
-4.  Install the **Python** plugin (by Squid) or **python3**.
-5.  Wait for installation to complete.
+## 🛠️ Complete Setup Guide
 
-### Step 2: Install the `requests` Library
+### Step 1: Install Community Applications (If Needed)
+If you haven't installed the plugin yet, do this first:
+1.  Go to the **Plugins** tab in your Unraid Dashboard.
+2.  Click the **Install Plugins** button at the bottom.
+3.  Paste this URL: `https://raw.githubusercontent.com/Squid-2/unRAID-community-apps/master/community.applications.plg`
+4.  Click **OK** and wait for the installation to complete. You may need to refresh the page or reboot if prompted.
 
-Once Python is installed, install the necessary dependency via SSH or the Web Terminal:
+### Step 2: Install Python 3
+1.  Open the **Community Applications** tab in your Dashboard.
+2.  Search for `Python`.
+3.  Look for the plugin named **Python** (by Squid) or **python3**.
+4.  Click **Install**. Wait for the process to finish (usually 1–3 minutes).
 
-#bash
-pip3 install requests
+### Step 3: Install Dependencies
+Open the Terminal (via the Web GUI "Terminal" button or SSH) to install the required HTTP library:
 
-⚠️ Note: Ensure you type requests (plural). Installing request (singular) will fail.
+    pip3 install requests
 
-Step 3: Create the Script
+> ⚠️ **Note:** Ensure you type `requests` (plural). Installing `request` (singular) will result in a `ModuleNotFoundError`.
 
-Navigate to your scripts directory via SSH:
-cd /mnt/user/appdata/scripts/
+### Step 4: Create the Script File
+1.  Navigate to your scripts directory:
 
-Create the file:
-nano immich_upload.py
+        cd /mnt/user/appdata/scripts/
 
-Paste the Script Code (found at the bottom of this guide) into the editor.
-Save (Ctrl+O, Enter) and Exit (Ctrl+X).
+2.  Create the file using a text editor:
 
-Step 4: Configure the Script
-Edit the script to match your environment:
-# At the top of immich_upload.py
-API_KEY = 'YOUR_IMMICH_API_KEY'                # Replace with actual key
-BASE_URL = 'http://YOUR_SERVER_IP:2283/api'     # Replace with your IP
-ROOT_FOLDER = '/mnt/user/photos/import_folder'  # Replace with source path
+        nano immich_upload.py
 
-▶️ Usage
-Dry Run (Test Mode)
-Always run this first to see what files would be uploaded without actually sending them.
-python3 ./immich_upload.py --dry-run
-Output Example:
-[DRY RUN] Starting import from: /mnt/user/photos/import_folder
-...
-[WOULD UPLOAD] /mnt/user/photos/camera_roll/IMG_001.jpg
-[WOULD UPLOAD] /mnt/user/photos/subfolder/photo.heic
-...
-Dry Run complete. Found 150 files. Potential uploads: 148
-Active Upload
-Run the script without flags to begin the actual import process.
-python3 ./immich_upload.py
-Output Example:
-[ACTIVE MODE] Starting import from: /mnt/user/photos/import_folder
-...
-[OK] Uploaded: IMG_001.jpg
-[SKIP] Duplicate (skipping): photo_heic.jpg
-[OK] Uploaded: photo.heic
-...
-Scan complete. Total processed: 150
+3.  Paste the **[Full Script](#the-full-script)** found at the bottom of this guide into the editor.
+4.  Save the file (`Ctrl+O`, then `Enter`) and Exit (`Ctrl+X`).
 
-🔧 Automation with User Scripts Plugin
-To run this automatically on a schedule:
+### Step 5: Configure Credentials
+Edit the top section of the script to match your specific environment:
 
-Go to Plugins → User Scripts.
-Click Add New Script.
-Name it Immich Import.
-Set Startup Type to "At scheduled times".
-In the command field, enter:
-python3 /mnt/user/appdata/scripts/immich_upload.py
+    nano immich_upload.py
 
-Save and configure your schedule.
+Update these three lines with your details:
 
+| Variable | Description | Example Value |
+| :--- | :--- | :--- |
+| `API_KEY` | Your Immich API Key | `'a1b2c3d4...'` |
+| `BASE_URL` | Your Immich Server Address | `'http://192.168.1.50:2283/api'` |
+| `ROOT_FOLDER` | Path to photos on Unraid | `'/mnt/user/photos/camera_roll'` |
 
-❓ Troubleshooting
-ErrorSolutionModuleNotFoundError: No module named 'requests'Run pip3 install requests. Check spelling.File not foundEnsure ROOT_FOLDER in the script is an absolute path (e.g., /mnt/user/...).Connection refusedVerify BASE_URL and port (default 2283) are reachable from the Unraid host.can't find '__main__' moduleEnsure the file extension is .py, not .ph or .txt.Rate Limit ErrorsIncrease DELAY_BETWEEN_UPLOADS in the script config to 1.0 or higher.
+> 💡 **Tip:** Always use absolute paths for `ROOT_FOLDER` (e.g., `/mnt/user/...`) to avoid path resolution errors.
 
-💾 The Script
-Copy the code below into your immich_upload.py file.
+Save (`Ctrl+O`, `Enter`) and exit (`Ctrl+X`).
+
+### Step 6: Test with Dry Run
+**Crucial:** Never run a bulk upload immediately. Test first to verify paths and detect duplicates safely.
+
+Run the script with the `--dry-run` flag:
+
+    python3 ./immich_upload.py --dry-run
+
+Expected Output:
+
+    [DRY RUN] Starting import from: /mnt/user/photos/camera_roll
+    Allowed extensions: {'.jpg', '.png', ...}
+    ------------------------------------------------------------
+    [WOULD UPLOAD] /mnt/user/photos/camera_roll/IMG_001.jpg
+    [WOULD UPLOAD] /mnt/user/photos/camera_roll/vacation/photo.heic
+    ------------------------------------------------------------
+    Dry Run complete. Found 150 files. Potential uploads: 148
+
+If you see this, no data has been sent to Immich yet.
+
+### Step 7: Execute Live Upload
+Once you are satisfied with the Dry Run results, remove the flag to begin the actual import:
+
+    python3 ./immich_upload.py
+
+Expected Output:
+
+    [ACTIVE MODE] Starting import from: /mnt/user/photos/camera_roll
+    ...
+    [OK] Uploaded: IMG_001.jpg
+    [SKIP] Duplicate (skipping): photo_heic.jpg
+    [OK] Uploaded: photo.heic
+    ...
+    Scan complete. Total processed: 150
+
+### Step 8: Automate (Optional)
+To run this automatically on a schedule (e.g., daily at midnight):
+
+1.  Go to **Plugins** → **User Scripts** in your Unraid Dashboard.
+2.  Click **Add New Script**.
+3.  Name it `Immich Auto Import`.
+4.  Set **Startup Type** to **"At scheduled times"**.
+5.  Set your desired schedule (e.g., `0 0 * * *` for midnight daily).
+6.  In the **Command** field, enter:
+
+        python3 /mnt/user/appdata/scripts/immich_upload.py
+
+7.  Click **Save**.
+
+---
+
+## ❓ Troubleshooting
+
+| Issue | Likely Cause | Solution |
+| :--- | :--- | :--- |
+| `ModuleNotFoundError: No module named 'requests'` | Missing library. | Run `pip3 install requests`. Check spelling (plural). |
+| `File not found` | Incorrect path. | Ensure `ROOT_FOLDER` is an absolute path like `/mnt/user/...`. |
+| `Connection refused` | Network issue. | Verify `BASE_URL` IP and port (default 2283) are accessible from Unraid. |
+| `can't find '__main__' module` | Wrong file extension. | Rename file from `.ph` or `.txt` to `.py`. |
+| `409 Conflict` (Skipped) | Duplicate detected. | This is normal behavior; the script skips existing files to save space/time. |
+| `Timeout Errors` | Large files or slow net. | Increase `DELAY_BETWEEN_UPLOADS` in the script config to `1.0` or `2.0`. |
+
+---
+
+## The Full Script
+
+Copy the code below entirely into your `immich_upload.py` file.
+
+---- BEGIN SCRIPT ----
+
 #!/usr/bin/python3
 import os
 import sys
@@ -236,12 +279,22 @@ if __name__ == "__main__":
 
     import_directory(ROOT_FOLDER, dry_run=args.dry_run)
 
-⚠️ Security Note
-For production environments, avoid hardcoding your API_KEY directly in the script if the repository is public. Instead, use Environment Variables:
+---- END SCRIPT ----
 
-Modify the script to read: API_KEY = os.environ.get('IMMICH_API_KEY')
-Set the variable in your terminal or User Scripts plugin before running:
-export IMMICH_API_KEY="your_actual_key_here"
-python3 immich_upload.py
+---
 
+## 🔒 Security Note
 
+For production environments, **do not hardcode your API key** in the script if the repository is public. Use Environment Variables instead:
+
+1.  Change config line to: `API_KEY = os.environ.get('IMMICH_API_KEY')`
+2.  Set variable before running: `export IMMICH_API_KEY="key_here"`
+3.  Or configure in User Scripts "Command" field: `export IMMICH_API_KEY="key"; python3 immich_upload.py`
+
+---
+
+## 🤝 Contributing
+
+Feel free to submit issues or enhancement requests! If you modify this script, please ensure you test thoroughly with `--dry-run` first.
+
+*Made with ❤️ for the Unraid and Immich community.*
