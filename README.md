@@ -1,5 +1,4 @@
-You are absolutely right. The issue is that when I wrap the entire README in code blocks, any triple backticks ``` inside the content close the outer wrapper early, breaking the format.
-Here is the complete README.md content. I have used four backticks (`` `` ``) for the internal code sections so they won't conflict with the outer formatting. Copy everything below exactly and save it as README.md.
+
 # 📸 Unraid Immich Auto-Importer
 
 A Python-based automation script designed to recursively scan folders on an **Unraid** server and upload images to a self-hosted **Immich** instance. 
