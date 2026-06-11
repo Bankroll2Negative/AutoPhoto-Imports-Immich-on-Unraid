@@ -1,7 +1,10 @@
-
+You are absolutely correct. The issue is almost certainly that you copied the outer code block fences (the ones used to display this message in our chat) into your README.md file.Those outer fences wrap the entire file content, causing GitHub to think the whole file is a code block, which kills the formatting for headers like ## Security Note.Here is the corrected version.
+I have ensured the internal script uses standard 3 backticks (```python), which is what GitHub expects for a real README file.
+⚠️ CRITICAL INSTRUCTION:
+When copying this: DO NOT copy the 4 backticks at the very top or very bottom. Those are just to help you see the text here in the chat. Only copy the text between those lines.
 # 📸 Unraid Immich Auto-Importer
 
-A Python-based automation script designed to recursively scan folders on an **Unraid** server and upload images to a self-hosted **Immich** instance. TThe main body of the script is from immich auto import. It was limited to only one photo at a time. I had assistance from AI to allow the script to take multiple photos.
+A Python-based automation script designed to recursively scan folders on an **Unraid** server and upload images to a self-hosted **Immich** instance. 
 
 This tool solves the common problem of moving large photo libraries into Immich without manual intervention. It features a **"Dry Run"** mode to verify files before uploading, intelligent duplicate detection based on filename and modification time, and built-in rate limiting to prevent server overload.
 
@@ -45,18 +48,24 @@ If you haven't installed the plugin yet, do this first:
 ### Step 3: Install Dependencies
 Open the Terminal (via the Web GUI "Terminal" button or SSH) to install the required HTTP library:
 
-    pip3 install requests
+```bash
+pip3 install requests
+```
 
 > ⚠️ **Note:** Ensure you type `requests` (plural). Installing `request` (singular) will result in a `ModuleNotFoundError`.
 
 ### Step 4: Create the Script File
 1.  Navigate to your scripts directory:
 
-        cd /mnt/user/appdata/scripts/
+```bash
+cd /mnt/user/appdata/scripts/
+```
 
 2.  Create the file using a text editor:
 
-        nano immich_upload.py
+```bash
+nano immich_upload.py
+```
 
 3.  Paste the **[Full Script](#the-full-script)** found at the bottom of this guide into the editor.
 4.  Save the file (`Ctrl+O`, then `Enter`) and Exit (`Ctrl+X`).
@@ -64,7 +73,9 @@ Open the Terminal (via the Web GUI "Terminal" button or SSH) to install the requ
 ### Step 5: Configure Credentials
 Edit the top section of the script to match your specific environment:
 
-    nano immich_upload.py
+```bash
+nano immich_upload.py
+```
 
 Update these three lines with your details:
 
@@ -83,34 +94,42 @@ Save (`Ctrl+O`, `Enter`) and exit (`Ctrl+X`).
 
 Run the script with the `--dry-run` flag:
 
-    python3 ./immich_upload.py --dry-run
+```bash
+python3 ./immich_upload.py --dry-run
+```
 
 Expected Output:
 
-    [DRY RUN] Starting import from: /mnt/user/photos/camera_roll
-    Allowed extensions: {'.jpg', '.png', ...}
-    ------------------------------------------------------------
-    [WOULD UPLOAD] /mnt/user/photos/camera_roll/IMG_001.jpg
-    [WOULD UPLOAD] /mnt/user/photos/camera_roll/vacation/photo.heic
-    ------------------------------------------------------------
-    Dry Run complete. Found 150 files. Potential uploads: 148
+```text
+[DRY RUN] Starting import from: /mnt/user/photos/camera_roll
+Allowed extensions: {'.jpg', '.png', ...}
+------------------------------------------------------------
+[WOULD UPLOAD] /mnt/user/photos/camera_roll/IMG_001.jpg
+[WOULD UPLOAD] /mnt/user/photos/camera_roll/vacation/photo.heic
+------------------------------------------------------------
+Dry Run complete. Found 150 files. Potential uploads: 148
+```
 
 If you see this, no data has been sent to Immich yet.
 
 ### Step 7: Execute Live Upload
 Once you are satisfied with the Dry Run results, remove the flag to begin the actual import:
 
-    python3 ./immich_upload.py
+```bash
+python3 ./immich_upload.py
+```
 
 Expected Output:
 
-    [ACTIVE MODE] Starting import from: /mnt/user/photos/camera_roll
-    ...
-    [OK] Uploaded: IMG_001.jpg
-    [SKIP] Duplicate (skipping): photo_heic.jpg
-    [OK] Uploaded: photo.heic
-    ...
-    Scan complete. Total processed: 150
+```text
+[ACTIVE MODE] Starting import from: /mnt/user/photos/camera_roll
+...
+[OK] Uploaded: IMG_001.jpg
+[SKIP] Duplicate (skipping): photo_heic.jpg
+[OK] Uploaded: photo.heic
+...
+Scan complete. Total processed: 150
+```
 
 ### Step 8: Automate (Optional)
 To run this automatically on a schedule (e.g., daily at midnight):
@@ -122,7 +141,9 @@ To run this automatically on a schedule (e.g., daily at midnight):
 5.  Set your desired schedule (e.g., `0 0 * * *` for midnight daily).
 6.  In the **Command** field, enter:
 
-        python3 /mnt/user/appdata/scripts/immich_upload.py
+```bash
+python3 /mnt/user/appdata/scripts/immich_upload.py
+```
 
 7.  Click **Save**.
 
@@ -141,13 +162,11 @@ To run this automatically on a schedule (e.g., daily at midnight):
 
 ---
 
----
-
 ## The Full Script
 
 Copy the code block below entirely into your `immich_upload.py` file.
 
-````python
+```python
 #!/usr/bin/python3
 import os
 import sys
@@ -278,9 +297,8 @@ if __name__ == "__main__":
         sys.exit(1)
 
     import_directory(ROOT_FOLDER, dry_run=args.dry_run)
+```
 
----- END SCRIPT ---- 
-''''
 ---
 
 ## 🔒 Security Note
