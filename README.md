@@ -1,7 +1,7 @@
 
 # 📸 Unraid Immich Auto-Importer
 
-A Python-based automation script designed to recursively scan folders on an **Unraid** server and upload images to a self-hosted **Immich** instance. 
+A Python-based automation script designed to recursively scan folders on an **Unraid** server and upload images to a self-hosted **Immich** instance. The main body of the script is from immich own auto import. It was limited to only 1 photo at a time. I had assitance from AI moding the script to take multiple photos. 
 
 This tool solves the common problem of moving large photo libraries into Immich without manual intervention. It features a **"Dry Run"** mode to verify files before uploading, intelligent duplicate detection based on filename and modification time, and built-in rate limiting to prevent server overload.
 
