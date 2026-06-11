@@ -41,7 +41,7 @@ Unraid does not include Python by default.
 
 Once Python is installed, install the necessary dependency via SSH or the Web Terminal:
 
-```bash
+#bash
 pip3 install requests
 
 ⚠️ Note: Ensure you type requests (plural). Installing request (singular) will fail.
