@@ -1,10 +1,6 @@
-You are absolutely correct. The issue is almost certainly that you copied the outer code block fences (the ones used to display this message in our chat) into your README.md file.Those outer fences wrap the entire file content, causing GitHub to think the whole file is a code block, which kills the formatting for headers like ## Security Note.Here is the corrected version.
-I have ensured the internal script uses standard 3 backticks (```python), which is what GitHub expects for a real README file.
-⚠️ CRITICAL INSTRUCTION:
-When copying this: DO NOT copy the 4 backticks at the very top or very bottom. Those are just to help you see the text here in the chat. Only copy the text between those lines.
 # 📸 Unraid Immich Auto-Importer
 
-A Python-based automation script designed to recursively scan folders on an **Unraid** server and upload images to a self-hosted **Immich** instance. 
+A Python-based automation script designed to recursively scan folders on an **Unraid** server and upload images to a self-hosted **Immich** instance. The base of this script came from the Immich site. I used AI to allow multiple photos to be imported from a directory, rather than single photos. 
 
 This tool solves the common problem of moving large photo libraries into Immich without manual intervention. It features a **"Dry Run"** mode to verify files before uploading, intelligent duplicate detection based on filename and modification time, and built-in rate limiting to prevent server overload.
 
